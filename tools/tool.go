@@ -45,7 +45,13 @@ func (t *Tool) Run() error {
 	}
 
 	if t.Step != nil {
-		err = t.Step.Handler(t.ctx, t.TaskId, t.traceId)
+		err = t.Step.Handler(t.ctx,
+			map[string]any{
+				"trace_id":  t.traceId,
+				"task_id":   t.TaskId,
+				"is_result": t.isResult, "payload": t.payload,
+			},
+		)
 	}
 
 	return err
