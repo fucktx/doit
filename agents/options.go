@@ -6,7 +6,7 @@ type Options struct {
 	prompt          any
 	errHandler      func(...any) error
 	maxIter         int  //重试次数
-	isReturn        bool //是否直接返回结果
+	isResult        bool //是否直接返回结果
 
 }
 
@@ -42,8 +42,8 @@ func WithMaxIter(maxIter int) Option {
 	}
 }
 
-func WithIsReturn(isReturn bool) Option {
+func WithIsResult(isResult bool) Option {
 	return func(o *Options) {
-		o.isReturn = isReturn
+		o.isResult = isResult
 	}
 }
