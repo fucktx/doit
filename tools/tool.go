@@ -16,7 +16,7 @@ type Tool struct {
 	*Options
 	TaskId any
 
-	Step callbacks.Callback
+	Callback callbacks.Callback //如果tool的callback 是nil,则集成来自对应的agent的
 }
 
 func (t *Tool) validateInput() error {
@@ -24,7 +24,10 @@ func (t *Tool) validateInput() error {
 }
 
 func (t *Tool) validateOutput() error {
-	return mapstructure.Decode(t.payload, &t.outputSchema)
+	if t.output == nil {
+		return nil
+	}
+	return mapstructure.Decode(t.output, &t.outputSchema)
 }
 
 func (t *Tool) Run() error {
@@ -44,12 +47,14 @@ func (t *Tool) Run() error {
 		t.isResult = true
 	}
 
-	if t.Step != nil {
-		err = t.Step.Handler(t.ctx,
+	if t.Callback != nil {
+		err = t.Callback.Handler(t.ctx,
 			map[string]any{
 				"trace_id":  t.traceId,
 				"task_id":   t.TaskId,
-				"is_result": t.isResult, "payload": t.payload,
+				"is_result": t.isResult,
+				"output":    t.output,
+				"input":     t.inputSchema,
 			},
 		)
 	}

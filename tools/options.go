@@ -8,9 +8,9 @@ type Options struct {
 	version      string
 	description  string
 	isResult     bool
-	payload      map[string]any //返回的数据
 	argsSchema   map[string]any //tool的参数param任务数据
 	inputSchema  any            //tool的参数绑定信息
+	output       map[string]any //返回的数据
 	outputSchema any            //结果绑定结构体
 }
 
